@@ -1,19 +1,27 @@
-package com.luizalabs.domain;
+package com.luizalabs.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Player {
-
-	private long id;
+	
+	private int id;
 	private String name;
+	private int kills;
+	
+	public Player(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 }
