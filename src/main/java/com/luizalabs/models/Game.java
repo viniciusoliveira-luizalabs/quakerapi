@@ -20,8 +20,6 @@ public class Game {
 
 	private static final int WORLD_PLAYER_ID = 1022;
 
-	private static int gameNumber = 0;
-
 	private int totalKills;
 
 	private List<Player> players;
@@ -54,14 +52,15 @@ public class Game {
 
 			int playerID = Integer.parseInt(row.getDescription());
 
-			registerPlayer(playerID);
+			if (getPlayerById(playerID) == null)
+				registerPlayer(playerID);
 
 			break;
 		case ClientUserinfoChanged:
 
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
-			
+
 			// verifica se existe um jogador na lista com o nome passado
 			Player player = getPlayerByName(playerName);
 			if (player != null) {
@@ -103,11 +102,11 @@ public class Game {
 			break;
 		}
 	}
-	
+
 	private Player getPlayerById(int playerID) {
 		return players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
 	}
-	
+
 	private Player getPlayerByName(String playerName) {
 		return players.stream().filter(p -> p.getName().equals(playerName)).findFirst().orElse(null);
 	}
@@ -115,16 +114,16 @@ public class Game {
 	void addKill(int killerID, int killedID) {
 
 		if (killerID != WORLD_PLAYER_ID) {
-				int playerTotalKills = kills.get(killerID);
-				kills.put(killerID, ++playerTotalKills);
+			int playerTotalKills = kills.get(killerID);
+			kills.put(killerID, ++playerTotalKills);
 		} else {
 			int playerTotalKills = kills.get(killedID);
 			kills.put(killedID, --playerTotalKills);
 		}
 
 		totalKills++;
-	}
 
+	}
 
 	void registerPlayer(int playerId) {
 
@@ -136,7 +135,7 @@ public class Game {
 		kills.put(playerId, 0);
 
 	}
-	
+
 	private void removeEmptyNamedPlayers() {
 		List<Player> emptyNamePlayers = players.stream().filter(p -> p.getName().isEmpty())
 				.collect(Collectors.toList());
