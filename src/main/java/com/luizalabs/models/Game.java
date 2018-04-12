@@ -23,9 +23,9 @@ public class Game {
 
 	private int totalKills;
 
-	// private final Map<Integer, String> playerMap;
+	private final Map<Integer, String> playerMap;
 
-	private List<Player> players;
+	// private List<Player> players;
 
 	private final Map<Integer, Integer> kills;
 
@@ -36,15 +36,14 @@ public class Game {
 
 	public Game() {
 		totalKills = 0;
-		players = new ArrayList<>();
+		// players = new ArrayList<>();
+		playerMap = new HashMap<>();
 		kills = new HashMap<>();
 
 	}
 
 	public void addEvent(Row row) {
-		
-		Player player;
-		
+
 		switch (row.getEvent()) {
 		case Kill:
 
@@ -59,30 +58,43 @@ public class Game {
 
 			int playerID = Integer.parseInt(row.getDescription());
 
-			// playerMap.put(playerID, null);
-			player = players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
-			if (player != null) {
-				players.set(players.indexOf(player), player);
-			}else {
-				registerPlayer(playerID, "");
-			}
-			// kills.put(playerID, 0);
+			playerMap.put(playerID, "");
+			// registerPlayer(playerID, "");
+			kills.put(playerID, 0);
 
 			break;
 		case ClientUserinfoChanged:
 
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
-			
-			player = players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
-			if (player != null) {
-				players.set(players.indexOf(player), player);
-			}else {
-				registerPlayer(playerID, playerName);
-			}
 
-			// playerMap.put(playerID, playerName);
+			// Player playerConnected = players.stream()
+			// .filter(p -> p.getId() == playerID &&
+			// !p.getName().equals(playerName)).findFirst().orElse(null);
+			// Player oldPlayerNewID = players.stream().filter(p ->
+			// p.getName().equals(playerName)).findFirst()
+			// .orElse(null);
+			// if (playerConnected != null) {
+			// playerConnected.setName(playerName);
+			// players.set(players.indexOf(playerConnected), playerConnected);
+			// } else if (oldPlayerNewID != null) {
+			// oldPlayerNewID.setId(playerID);
+			// oldPlayerNewID.setName(playerName);
+			// players.set(players.indexOf(oldPlayerNewID), oldPlayerNewID);
+			// } else {
 			// registerPlayer(playerID, playerName);
+			// }
+			Integer oldPlayerKey = null;
+			if (getKeyFromValue(playerMap, playerName) instanceof Integer) {
+				oldPlayerKey = (Integer) getKeyFromValue(playerMap, playerName);
+			}
+			if (oldPlayerKey != null && oldPlayerKey != playerID) {
+				playerMap.put(playerID, playerMap.remove(oldPlayerKey));
+				kills.put(playerID, kills.get(oldPlayerKey) + kills.get(playerID));
+				kills.remove(oldPlayerKey);
+			} else {
+				playerMap.put(playerID, playerName);
+			}
 			break;
 		case ClientDisconnect:
 			playerID = Integer.parseInt(row.getDescription());
@@ -109,48 +121,69 @@ public class Game {
 		}
 	}
 
+	public static Object getKeyFromValue(Map hashMap, Object value) {
+		for (Object o : hashMap.keySet()) {
+			if (hashMap.get(o).equals(value)) {
+				return o;
+			}
+		}
+		return null;
+	}
+
 	void addKill(int killerID, int killedID) {
 
 		if (killerID != WORLD_PLAYER_ID) {
-			// int playerTotalKills = kills.get(killerID);
-			// kills.put(killerID, ++playerTotalKills);
+			int playerTotalKills = kills.get(killerID);
+			kills.put(killerID, ++playerTotalKills);
 
-			Player player = players.stream().filter(p -> p.getId() == killerID).findFirst().get();
-
-			int playerTotalKills = player.getKills();
-			player.setKills(playerTotalKills++);
-			players.set(players.indexOf(player), player);
+			// Player player = players.stream().filter(p -> p.getId() ==
+			// killerID).findFirst().get();
+			//
+			// int playerTotalKills = player.getKills();
+			// player.setKills(playerTotalKills++);
+			// players.set(players.indexOf(player), player);
 
 		}
 
 		totalKills++;
 	}
 
-	/*void addKill(int killerID, int killedID, DeathMeaning death) {
-		addKill(killerID, killedID);
-	}*/
+	/*
+	 * void addKill(int killerID, int killedID, DeathMeaning death) {
+	 * addKill(killerID, killedID); }
+	 */
 
-//	private String[] getPlayers() {
-//
-////		return players.stream().
-//		
-//	}
+	private String[] getPlayers() {
+
+		// List<String> result = new ArrayList<>();
+		//
+		// for (Player player : players) {
+		// String playerName = player.getName();
+		//
+		// result.add(playerName);
+		// }
+		//
+		// return result.toArray(new String[] {});
+
+		return playerMap.values().toArray(new String[] {});
+
+	}
 
 	public String[] getKills() {
 
 		List<String> result = new ArrayList<>();
 
-		// for (Integer i : players.keySet()) {
-		// String player = playerMap.get(i);
-		// int playerKills = kills.get(i);
-		// result.add("\"" + player + "\": " + playerKills);
-		// }
-
-		for (Player player : players) {
-			String playerName = player.getName();
-			int playerKills = player.getKills();
-			result.add("\"" + playerName + "\": " + playerKills);
+		for (Integer i : playerMap.keySet()) {
+			String player = playerMap.get(i);
+			int playerKills = kills.get(i);
+			result.add("\"" + player + "\": " + playerKills);
 		}
+
+		// for (Player player : players) {
+		// String playerName = player.getName();
+		// int playerKills = player.getKills();
+		// result.add("\"" + playerName + "\": " + playerKills);
+		// }
 
 		return result.toArray(new String[] {});
 	}
@@ -162,11 +195,11 @@ public class Game {
 		}
 
 		// if (playerMap.containsKey(id)) {
-		// playerMap.put(id, playerName);
-		// kills.put(id, 0);
+		playerMap.put(id, playerName);
+		kills.put(id, 0);
 		// }
 
-		players.add(new Player(id, playerName, 0));
+		// players.add(new Player(id, playerName, 0));
 
 	}
 
@@ -179,15 +212,11 @@ public class Game {
 		result.append("game_").append(gameNumber).append(": {\n");
 		result.append("\ttotal_kills: ").append(this.getTotalKills()).append(",\n");
 
-		if(this.getPlayers() == null) {
-			System.out.println("BREAK!");
-		}
-		
 		// Players
 		result.append("\tplayers: [");
-//		for (String playerName : this.getPlayers()) {
-//			result.append('"').append(playerName).append('"').append(',');
-//		}
+		for (String playerName : this.getPlayers()) {
+			result.append('"').append(playerName).append('"').append(',');
+		}
 		result.deleteCharAt(result.lastIndexOf(","));
 		result.append("]\n").append(',');
 		result.append("\tkills: {\n");
@@ -196,6 +225,13 @@ public class Game {
 		for (String killLine : this.getKills()) {
 			result.append("\t\t").append(killLine).append(",\n");
 		}
+
+		// result.append("\tplayers: [");
+		// for (Player player : players) {
+		// result.append('"').append(player.getName()).append('"').append(',');
+		// }
+		result.deleteCharAt(result.lastIndexOf(","));
+		result.append("]\n").append(',');
 		result.deleteCharAt(result.lastIndexOf(","));
 		result.append("\t}\n").append("\t}\n").append(',');
 		gameNumber++;
