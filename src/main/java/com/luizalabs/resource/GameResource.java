@@ -29,6 +29,6 @@ public class GameResource extends BaseResource {
 		QuakeParser parser = new QuakeParser(log);
 
 		// return buildResponse(HttpStatus.OK, Optional.ofNullable(parser.results()));
-		return new ResponseEntity(parser.results(), HttpStatus.OK);
+		return new ResponseEntity(parser.getGameList(), HttpStatus.OK);
 	}
 }

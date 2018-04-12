@@ -2,6 +2,7 @@ package com.luizalabs.models;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,13 +20,11 @@ public class Game {
 
 	private static final int WORLD_PLAYER_ID = 1022;
 
-	private static int gameNumber = 1;
+	private static int gameNumber = 0;
 
 	private int totalKills;
 
-	private final Map<Integer, String> playerMap;
-
-	// private List<Player> players;
+	private List<Player> players;
 
 	private final Map<Integer, Integer> kills;
 
@@ -36,8 +35,7 @@ public class Game {
 
 	public Game() {
 		totalKills = 0;
-		// players = new ArrayList<>();
-		playerMap = new HashMap<>();
+		players = new ArrayList<>();
 		kills = new HashMap<>();
 
 	}
@@ -47,193 +45,108 @@ public class Game {
 		switch (row.getEvent()) {
 		case Kill:
 
-			DeathMeaning deathMeaning = DeathMeaning.valueOf(Integer.parseInt(row.getTarget()));
 			int killerID = Integer.parseInt(row.getDescription());
 			int killedID = Integer.parseInt(row.getOrigin());
 
-			// addKill(killerID, killedID, deathMeaning);
 			addKill(killerID, killedID);
 			break;
 		case ClientConnect:
 
 			int playerID = Integer.parseInt(row.getDescription());
 
-			playerMap.put(playerID, "");
-			// registerPlayer(playerID, "");
-			kills.put(playerID, 0);
+			registerPlayer(playerID);
 
 			break;
 		case ClientUserinfoChanged:
 
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
-
-			// Player playerConnected = players.stream()
-			// .filter(p -> p.getId() == playerID &&
-			// !p.getName().equals(playerName)).findFirst().orElse(null);
-			// Player oldPlayerNewID = players.stream().filter(p ->
-			// p.getName().equals(playerName)).findFirst()
-			// .orElse(null);
-			// if (playerConnected != null) {
-			// playerConnected.setName(playerName);
-			// players.set(players.indexOf(playerConnected), playerConnected);
-			// } else if (oldPlayerNewID != null) {
-			// oldPlayerNewID.setId(playerID);
-			// oldPlayerNewID.setName(playerName);
-			// players.set(players.indexOf(oldPlayerNewID), oldPlayerNewID);
-			// } else {
-			// registerPlayer(playerID, playerName);
-			// }
-			Integer oldPlayerKey = null;
-			if (getKeyFromValue(playerMap, playerName) instanceof Integer) {
-				oldPlayerKey = (Integer) getKeyFromValue(playerMap, playerName);
-			}
-			if (oldPlayerKey != null && oldPlayerKey != playerID) {
-				playerMap.put(playerID, playerMap.remove(oldPlayerKey));
-				kills.put(playerID, kills.get(oldPlayerKey) + kills.get(playerID));
-				kills.remove(oldPlayerKey);
+			
+			// verifica se existe um jogador na lista com o nome passado
+			Player player = getPlayerByName(playerName);
+			if (player != null) {
+				// pega a chave do jogador existente
+				int oldPlayerReconnectedKey = player.getId();
+				// verifica se o jogador reconectou com diferente ID
+				if (oldPlayerReconnectedKey != playerID) {
+					// prepara jogador a ser trocado
+					Player playerSwap = players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
+					// troca os valores de id dos jogadores
+					playerSwap.setId(oldPlayerReconnectedKey);
+					player.setId(playerID);
+					// atualiza chave e valor no objeto kills
+					int killsAux = kills.get(playerID);
+					kills.put(playerID, kills.get(oldPlayerReconnectedKey) + killsAux);
+					kills.put(oldPlayerReconnectedKey, killsAux);
+				}
 			} else {
-				playerMap.put(playerID, playerName);
+				player = getPlayerById(playerID);
+				player.setName(playerName);
+				players.set(players.indexOf(player), player);
 			}
+
 			break;
 		case ClientDisconnect:
 			playerID = Integer.parseInt(row.getDescription());
-			// playerMap.remove(playerID);
 			break;
 		case ShutdownGame:
-
+			removeEmptyNamedPlayers();
 			finished = true;
 			break;
 		case InitGame:
-
-			// We should get here only once per game
 			if (initiated && !finished) {
-				// We are getting a second InitGame without having finished the
-				// actual game first. It may indicated that we missed some line
-				// of the log.
+				removeEmptyNamedPlayers();
 				finished = true;
-
-				// NOTICE We could throw an exception here
 			}
 			initiated = true;
 
 			break;
 		}
 	}
-
-	public static Object getKeyFromValue(Map hashMap, Object value) {
-		for (Object o : hashMap.keySet()) {
-			if (hashMap.get(o).equals(value)) {
-				return o;
-			}
-		}
-		return null;
+	
+	private Player getPlayerById(int playerID) {
+		return players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
+	}
+	
+	private Player getPlayerByName(String playerName) {
+		return players.stream().filter(p -> p.getName().equals(playerName)).findFirst().orElse(null);
 	}
 
 	void addKill(int killerID, int killedID) {
 
 		if (killerID != WORLD_PLAYER_ID) {
-			int playerTotalKills = kills.get(killerID);
-			kills.put(killerID, ++playerTotalKills);
-
-			// Player player = players.stream().filter(p -> p.getId() ==
-			// killerID).findFirst().get();
-			//
-			// int playerTotalKills = player.getKills();
-			// player.setKills(playerTotalKills++);
-			// players.set(players.indexOf(player), player);
-
+				int playerTotalKills = kills.get(killerID);
+				kills.put(killerID, ++playerTotalKills);
+		} else {
+			int playerTotalKills = kills.get(killedID);
+			kills.put(killedID, --playerTotalKills);
 		}
 
 		totalKills++;
 	}
 
-	/*
-	 * void addKill(int killerID, int killedID, DeathMeaning death) {
-	 * addKill(killerID, killedID); }
-	 */
 
-	private String[] getPlayers() {
+	void registerPlayer(int playerId) {
 
-		// List<String> result = new ArrayList<>();
-		//
-		// for (Player player : players) {
-		// String playerName = player.getName();
-		//
-		// result.add(playerName);
-		// }
-		//
-		// return result.toArray(new String[] {});
-
-		return playerMap.values().toArray(new String[] {});
-
-	}
-
-	public String[] getKills() {
-
-		List<String> result = new ArrayList<>();
-
-		for (Integer i : playerMap.keySet()) {
-			String player = playerMap.get(i);
-			int playerKills = kills.get(i);
-			result.add("\"" + player + "\": " + playerKills);
-		}
-
-		// for (Player player : players) {
-		// String playerName = player.getName();
-		// int playerKills = player.getKills();
-		// result.add("\"" + playerName + "\": " + playerKills);
-		// }
-
-		return result.toArray(new String[] {});
-	}
-
-	void registerPlayer(int id, String playerName) {
-
-		if (id == WORLD_PLAYER_ID) {
+		if (playerId == WORLD_PLAYER_ID) {
 			return;
 		}
 
-		// if (playerMap.containsKey(id)) {
-		playerMap.put(id, playerName);
-		kills.put(id, 0);
-		// }
+		players.add(new Player(playerId, ""));
+		kills.put(playerId, 0);
 
-		// players.add(new Player(id, playerName, 0));
+	}
+	
+	private void removeEmptyNamedPlayers() {
+		List<Player> emptyNamePlayers = players.stream().filter(p -> p.getName().isEmpty())
+				.collect(Collectors.toList());
 
+		players.removeAll(emptyNamePlayers);
 	}
 
 	@Override
 	public String toString() {
-
-		StringBuilder result = new StringBuilder();
-
-		result.append("\"game_").append(gameNumber).append("\": {\n");
-		result.append("\t\"total_kills\": ").append(this.getTotalKills()).append(",\n");
-
-		// Players
-		result.append("\t\"players\": [");
-		for (String playerName : this.getPlayers()) {
-			result.append('"').append(playerName).append('"').append(',');
-		}
-		result.deleteCharAt(result.lastIndexOf(","));
-		result.append("]").append(",\n");
-		result.append("\t\"kills\": {\n");
-
-		// Kills
-		for (String killLine : this.getKills()) {
-			result.append("\t\t").append(killLine).append(",\n");
-		}
-
-		// result.append("\tplayers: [");
-		// for (Player player : players) {
-		// result.append('"').append(player.getName()).append('"').append(',');
-		// }
-		result.deleteCharAt(result.lastIndexOf(","));
-		result.append("\t}\n").append("\t}\n").append(',');
-		gameNumber++;
-
-		return result.toString();
+		return "Game [totalKills=" + totalKills + ", players=" + players + ", kills=" + kills + "]";
 	}
 
 }
