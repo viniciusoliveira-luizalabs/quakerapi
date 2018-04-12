@@ -208,18 +208,17 @@ public class Game {
 
 		StringBuilder result = new StringBuilder();
 
-		result.append("\t{\n");
-		result.append("game_").append(gameNumber).append(": {\n");
-		result.append("\ttotal_kills: ").append(this.getTotalKills()).append(",\n");
+		result.append("\"game_").append(gameNumber).append("\": {\n");
+		result.append("\t\"total_kills\": ").append(this.getTotalKills()).append(",\n");
 
 		// Players
-		result.append("\tplayers: [");
+		result.append("\t\"players\": [");
 		for (String playerName : this.getPlayers()) {
 			result.append('"').append(playerName).append('"').append(',');
 		}
 		result.deleteCharAt(result.lastIndexOf(","));
-		result.append("]\n").append(',');
-		result.append("\tkills: {\n");
+		result.append("]").append(",\n");
+		result.append("\t\"kills\": {\n");
 
 		// Kills
 		for (String killLine : this.getKills()) {
@@ -230,8 +229,6 @@ public class Game {
 		// for (Player player : players) {
 		// result.append('"').append(player.getName()).append('"').append(',');
 		// }
-		result.deleteCharAt(result.lastIndexOf(","));
-		result.append("]\n").append(',');
 		result.deleteCharAt(result.lastIndexOf(","));
 		result.append("\t}\n").append("\t}\n").append(',');
 		gameNumber++;

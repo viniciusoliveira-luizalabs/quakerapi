@@ -67,14 +67,14 @@ public class QuakeParser {
 		actualGame = new Game();
 	}
 
-	public /*JSONObject*/String results() throws JSONException {
+	public String results() throws JSONException {
 
 		if (!this.parsed) {
 			parse();
 		}
 
 		StringBuilder result = new StringBuilder();
-
+		result.append("\t{\n");
 		// int gameCount = 1;
 		for (Iterator<Game> it = gameList.iterator(); it.hasNext();) {
 			Game game = (Game) it.next();
@@ -101,11 +101,11 @@ public class QuakeParser {
 			 */
 
 		}
-		
+		result.deleteCharAt(result.lastIndexOf(","));
 		result.append("\t}\n");
 
-		// return result.toString();
-		return /*new JSONObject(*/result.toString()/*)*/;
+		return result.toString();
+//		 return new JSONObject(result.toString());
 	}
 
 }
