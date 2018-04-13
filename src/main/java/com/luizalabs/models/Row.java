@@ -2,9 +2,13 @@ package com.luizalabs.models;
 
 import java.io.Serializable;
 
+import com.luizalabs.enums.Event;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Ivo
@@ -14,6 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
+@NoArgsConstructor
 public class Row implements Serializable{
 
 	/**
@@ -25,7 +31,7 @@ public class Row implements Serializable{
 
 	private Date time;
 
-	private final Event event;
+	private Event event;
 
 	private String description;
 

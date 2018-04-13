@@ -16,13 +16,13 @@ import com.luizalabs.models.Row;
 @Service
 public class GameService {
 
-	private final LogFile log;
+	private final ProcessFile log;
 	private Game actualGame;
 
 	private final List<Game> gameList;
 
 	@Autowired
-	public GameService(LogFile log) {
+	public GameService(ProcessFile log) {
 		this.gameList = new ArrayList<>();
 		this.log = log;
 	}

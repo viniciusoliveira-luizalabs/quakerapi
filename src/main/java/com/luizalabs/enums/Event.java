@@ -1,4 +1,4 @@
-package com.luizalabs.models;
+package com.luizalabs.enums;
 
 /**
  * @author Ivo

@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class LogFile implements Iterable<String> {
+public class ProcessFile implements Iterable<String> {
 
 	private Stream<String> lines;
 	
-	public LogFile() {
+	public ProcessFile() {
 		readFile();
 	}
 

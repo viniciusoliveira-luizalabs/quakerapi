@@ -17,7 +17,7 @@ import com.luizalabs.models.Row;
 public class GameServiceTest {
 	
 	@Mock
-	private LogFile log;
+	private ProcessFile log;
 		
 	private GameService gameService;
 	

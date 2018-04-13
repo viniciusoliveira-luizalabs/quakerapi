@@ -1,7 +1,7 @@
 package com.luizalabs.service;
 
+import com.luizalabs.enums.Event;
 import com.luizalabs.models.Date;
-import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
 import com.luizalabs.readers.BeginReader;
 import com.luizalabs.readers.ConnectReader;

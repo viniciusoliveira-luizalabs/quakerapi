@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.luizalabs.models.Event;
+import com.luizalabs.enums.Event;
 import com.luizalabs.models.Row;
 
 /**

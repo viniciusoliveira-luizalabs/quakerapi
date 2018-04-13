@@ -4,12 +4,8 @@ import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,14 +16,7 @@ import java.util.HashMap;
  */
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
-public class Game implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Game{
 
 	private static final int WORLD_PLAYER_ID = 1022;
 
@@ -154,13 +143,5 @@ public class Game implements Serializable {
 		kills.put(playerId, 0);
 
 	}
-
-	/*
-	 * private void removeEmptyNamedPlayers() { List<Player> emptyNamePlayers =
-	 * players.stream().filter(p -> p.getName().isEmpty())
-	 * .collect(Collectors.toList());
-	 * 
-	 * players.removeAll(emptyNamePlayers); }
-	 */
 
 }

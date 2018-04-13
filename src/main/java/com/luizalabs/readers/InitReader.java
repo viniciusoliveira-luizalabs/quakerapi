@@ -1,6 +1,6 @@
 package com.luizalabs.readers;
 
-import com.luizalabs.models.Event;
+import com.luizalabs.enums.Event;
 import com.luizalabs.models.Row;
 
 
