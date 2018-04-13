@@ -1,5 +1,10 @@
 package com.luizalabs.readers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
 
@@ -16,23 +21,13 @@ public class InfoChangedReader extends GenericReader {
 
             String[] split = rawrow.split("\\s+");
 
-            row.setDescription(split[2]);
-
-            String info = split[3];
-
-            String[] details = info.split("\\\\");
-
-            for (int i = 0; i < details.length; i++) {
-                String detail = details[i];
-
-                switch (detail) {
-                    case "n":
-                        row.setTarget(details[i + 1]);
-                        i++;
-                        break;
-                }
-
-            }
+            row.setDescription(split[2]);            
+            
+            Pattern pattern = Pattern.compile("(n\\\\)(.+?)(\\\\t)");
+            
+            String target = getArray(pattern, rawrow)[0].split("\\\\")[1];
+  
+            row.setTarget(target);
 
             return row;
         } else if (successor != null) {
@@ -40,6 +35,17 @@ public class InfoChangedReader extends GenericReader {
         } else {
             return Row.blankEvent();
         }
+    }
+    
+    private String[] getArray(Pattern tagMatcher, String str) {
+        Matcher m = tagMatcher.matcher(str);
+        List<String> l = new ArrayList<String>();
+        while(m.find()) {
+            String s = m.group(); 
+            s = s.substring(1); 
+            l.add(s);
+        }
+        return l.toArray(new String[0]);
     }
 
 }

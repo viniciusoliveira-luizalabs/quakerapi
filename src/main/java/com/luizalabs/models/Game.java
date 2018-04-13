@@ -9,19 +9,25 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * @author Ivo
  *
- * Objeto para armazenar informacoes do jogo
+ *         Objeto para armazenar informacoes do jogo
  */
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Game {
+public class Game implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final int WORLD_PLAYER_ID = 1022;
 
@@ -29,7 +35,7 @@ public class Game {
 
 	private List<Player> players;
 
-	private final Map<Integer, Integer> kills;
+	private Map<Integer, Integer> kills;
 
 	@JsonIgnore
 	private boolean initiated = false;
@@ -49,7 +55,7 @@ public class Game {
 	/**
 	 * @param row
 	 * 
-	 * Adicao de eventos baseados no jogo
+	 *            Adicao de eventos baseados no jogo
 	 */
 	public void addEvent(Row row) {
 
@@ -149,12 +155,12 @@ public class Game {
 
 	}
 
-/*	private void removeEmptyNamedPlayers() {
-		List<Player> emptyNamePlayers = players.stream().filter(p -> p.getName().isEmpty())
-				.collect(Collectors.toList());
-
-		players.removeAll(emptyNamePlayers);
-	}*/
-
+	/*
+	 * private void removeEmptyNamedPlayers() { List<Player> emptyNamePlayers =
+	 * players.stream().filter(p -> p.getName().isEmpty())
+	 * .collect(Collectors.toList());
+	 * 
+	 * players.removeAll(emptyNamePlayers); }
+	 */
 
 }

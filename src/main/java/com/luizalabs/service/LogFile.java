@@ -1,4 +1,4 @@
-package com.luizalabs.models;
+package com.luizalabs.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,15 +7,26 @@ import java.io.FileReader;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
+/**
+ * @author Ivo
+ *
+ */
+@Component
 public class LogFile implements Iterable<String> {
 
 	private Stream<String> lines;
+	
+	public LogFile() {
+		readFile();
+	}
 
-	public LogFile(File file) {
+	private void readFile() {
 
 		try {
 			@SuppressWarnings("resource")
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("src/main/java/games.log")));
 			
 			lines = bufferedReader.lines();
 

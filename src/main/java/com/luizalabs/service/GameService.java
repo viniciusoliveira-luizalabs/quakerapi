@@ -2,23 +2,26 @@ package com.luizalabs.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.luizalabs.models.Game;
-import com.luizalabs.models.LogFile;
 import com.luizalabs.models.Row;
 
 /**
  * @author Ivo
  *
  */
+@Service
 public class GameService {
-
-	private boolean readed = false;
 
 	private final LogFile log;
 	private Game actualGame;
 
 	private final List<Game> gameList;
 
+	@Autowired
 	public GameService(LogFile log) {
 		this.gameList = new ArrayList<>();
 		this.log = log;
@@ -26,9 +29,7 @@ public class GameService {
 
 	public List<Game> getGameList() {
 
-		if (!this.readed) {
-			readLog();
-		}
+		readLog();
 
 		return gameList;
 	}
@@ -37,10 +38,10 @@ public class GameService {
 
 		configureNewGame();
 
-		for (String rawLine : log) {
-			Row line = GameSetup.readLine(rawLine);
+		for (String line : log) {
+			Row row = GameSetup.readLine(line);
 
-			actualGame.addEvent(line);
+			actualGame.addEvent(row);
 
 			if (actualGame.isFinished()) {
 				configureNewGame();
@@ -48,7 +49,6 @@ public class GameService {
 
 		}
 
-		readed = true;
 
 	}
 

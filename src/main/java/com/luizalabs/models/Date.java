@@ -1,5 +1,7 @@
 package com.luizalabs.models;
 
+import java.io.Serializable;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Date {
+public class Date implements Serializable{
 
-    private final int hours;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final int hours;
     private final int minutes;
 
     public Date() {

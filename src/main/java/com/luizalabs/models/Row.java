@@ -1,17 +1,25 @@
 package com.luizalabs.models;
 
+import java.io.Serializable;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author Ivo
+ * 
  * Objeto que guarda informações da linha do log
  */
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Row {
+public class Row implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String line = "";
 
