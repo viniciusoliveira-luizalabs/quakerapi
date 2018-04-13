@@ -2,8 +2,6 @@ package com.luizalabs.models;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -63,7 +61,7 @@ public class Game {
 
 			addKill(killerID, killedID);
 			break;
-		case Connect:
+		case ClientConnect:
 
 			int playerID = Integer.parseInt(row.getDescription());
 
@@ -71,7 +69,7 @@ public class Game {
 				registerPlayer(playerID);
 
 			break;
-		case UserinfoChanged:
+		case ClientUserinfoChanged:
 
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
@@ -100,7 +98,7 @@ public class Game {
 			}
 
 			break;
-		case Disconnect:
+		case ClientDisconnect:
 			playerID = Integer.parseInt(row.getDescription());
 			break;
 		case ShutdownGame:
@@ -151,12 +149,12 @@ public class Game {
 
 	}
 
-	private void removeEmptyNamedPlayers() {
+/*	private void removeEmptyNamedPlayers() {
 		List<Player> emptyNamePlayers = players.stream().filter(p -> p.getName().isEmpty())
 				.collect(Collectors.toList());
 
 		players.removeAll(emptyNamePlayers);
-	}
+	}*/
 
 
 }

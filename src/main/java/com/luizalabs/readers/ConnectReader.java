@@ -11,7 +11,7 @@ public class ConnectReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.Connect)) {
+        if (row.getEvent().equals(Event.ClientConnect)) {
             String rawLine = row.getLine();
 
             String[] split = rawLine.split("\\s+");

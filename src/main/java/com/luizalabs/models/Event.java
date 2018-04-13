@@ -12,7 +12,7 @@ public enum Event {
 
 	InitGame, ShutdownGame, Exit,
 
-	Connect, Disconnect, UserinfoChanged, Begin,
+	ClientConnect, ClientDisconnect, ClientUserinfoChanged, ClientBegin,
 
 	score, say
 

@@ -11,7 +11,7 @@ public class BeginReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.Begin)) {
+        if (row.getEvent().equals(Event.ClientBegin)) {
             String rawLine = row.getLine();
 
             String[] split = rawLine.split("\\s+");

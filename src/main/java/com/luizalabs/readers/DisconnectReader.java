@@ -11,7 +11,7 @@ public class DisconnectReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.Disconnect)) {
+        if (row.getEvent().equals(Event.ClientDisconnect)) {
             String rawLine = row.getLine();
 
             String[] split = rawLine.split("\\s+");

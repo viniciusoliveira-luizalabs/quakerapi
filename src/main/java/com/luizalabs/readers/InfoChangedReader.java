@@ -11,7 +11,7 @@ public class InfoChangedReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-		if (row.getEvent().equals(Event.UserinfoChanged)) {
+		if (row.getEvent().equals(Event.ClientUserinfoChanged)) {
             String rawrow = row.getLine();
 
             String[] split = rawrow.split("\\s+");
