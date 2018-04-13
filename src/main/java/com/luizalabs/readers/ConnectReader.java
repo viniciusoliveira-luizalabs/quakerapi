@@ -1,21 +1,20 @@
-package com.luizalabs.parsers;
+package com.luizalabs.readers;
 
 import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
-
 
 /**
  * @author Ivo
  *
  */
-public class InitGameParser extends AbstractLineParser {
+public class ConnectReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.InitGame)) {
-            String rawLine = row.getRawLine();
+        if (row.getEvent().equals(Event.Connect)) {
+            String rawLine = row.getLine();
 
-            String[] split = rawLine.split("\\s+", 3);
+            String[] split = rawLine.split("\\s+");
 
             row.setDescription(split[2]);
 
@@ -23,7 +22,7 @@ public class InitGameParser extends AbstractLineParser {
         } else if (successor != null) {
             return successor.processLine(row);
         } else {
-        	return Row.blankEvent();
+            return Row.blankEvent();
         }
     }
 

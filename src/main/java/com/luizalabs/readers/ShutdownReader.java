@@ -1,4 +1,4 @@
-package com.luizalabs.parsers;
+package com.luizalabs.readers;
 
 import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
@@ -7,7 +7,7 @@ import com.luizalabs.models.Row;
  * @author Ivo
  *
  */
-public class ShutdownGameParser extends AbstractLineParser {
+public class ShutdownReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {

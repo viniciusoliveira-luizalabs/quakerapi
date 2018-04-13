@@ -9,13 +9,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Ivo
+ *
+ * Objeto para armazenar informacoes do jogo
+ */
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class Game {
 
 	private static final int WORLD_PLAYER_ID = 1022;
@@ -31,6 +38,9 @@ public class Game {
 	@JsonIgnore
 	private boolean finished = false;
 
+	/**
+	 * 
+	 */
 	public Game() {
 		totalKills = 0;
 		players = new ArrayList<>();
@@ -38,6 +48,11 @@ public class Game {
 
 	}
 
+	/**
+	 * @param row
+	 * 
+	 * Adicao de eventos baseados no jogo
+	 */
 	public void addEvent(Row row) {
 
 		switch (row.getEvent()) {
@@ -48,7 +63,7 @@ public class Game {
 
 			addKill(killerID, killedID);
 			break;
-		case ClientConnect:
+		case Connect:
 
 			int playerID = Integer.parseInt(row.getDescription());
 
@@ -56,7 +71,7 @@ public class Game {
 				registerPlayer(playerID);
 
 			break;
-		case ClientUserinfoChanged:
+		case UserinfoChanged:
 
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
@@ -85,20 +100,20 @@ public class Game {
 			}
 
 			break;
-		case ClientDisconnect:
+		case Disconnect:
 			playerID = Integer.parseInt(row.getDescription());
 			break;
 		case ShutdownGame:
-			removeEmptyNamedPlayers();
 			finished = true;
 			break;
 		case InitGame:
 			if (initiated && !finished) {
-				removeEmptyNamedPlayers();
 				finished = true;
 			}
 			initiated = true;
 
+			break;
+		default:
 			break;
 		}
 	}
@@ -143,9 +158,5 @@ public class Game {
 		players.removeAll(emptyNamePlayers);
 	}
 
-	@Override
-	public String toString() {
-		return "Game [totalKills=" + totalKills + ", players=" + players + ", kills=" + kills + "]";
-	}
 
 }

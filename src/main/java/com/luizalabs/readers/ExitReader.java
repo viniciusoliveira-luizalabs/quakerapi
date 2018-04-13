@@ -1,4 +1,4 @@
-package com.luizalabs.parsers;
+package com.luizalabs.readers;
 
 import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
@@ -7,17 +7,16 @@ import com.luizalabs.models.Row;
  * @author Ivo
  *
  */
-public class ItemParser extends AbstractLineParser {
+public class ExitReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.Item)) {
-            String rawLine = row.getRawLine();
+        if (row.getEvent().equals(Event.Exit)) {
+            String rawLine = row.getLine();
 
-            String[] split = rawLine.split("\\s+");
+            String[] split = rawLine.split("\\s+", 3);
 
             row.setDescription(split[2]);
-            row.setTarget(split[3]);
 
             return row;
         } else if (successor != null) {

@@ -1,5 +1,9 @@
 package com.luizalabs.models;
 
+/**
+ * @author Ivo
+ *
+ */
 public enum Event {
 
 	BLANK,
@@ -8,7 +12,7 @@ public enum Event {
 
 	InitGame, ShutdownGame, Exit,
 
-	ClientConnect, ClientDisconnect, ClientUserinfoChanged, ClientBegin,
+	Connect, Disconnect, UserinfoChanged, Begin,
 
 	score, say
 

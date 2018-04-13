@@ -1,22 +1,19 @@
 package com.luizalabs.models;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author Ivo
- *
+ * Objeto que guarda informações da linha do log
  */
 @Getter
 @Setter
 @EqualsAndHashCode
 public class Row {
 
-	private String rawLine = "";
+	private String line = "";
 
 	private Date time;
 
@@ -44,8 +41,8 @@ public class Row {
 		return new Row(new Date(), Event.BLANK);
 	}
 
-	public String getRawLine() {
-		return rawLine.trim();
+	public String getLine() {
+		return line.trim();
 	}
 
 }

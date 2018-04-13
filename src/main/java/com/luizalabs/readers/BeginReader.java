@@ -1,4 +1,4 @@
-package com.luizalabs.parsers;
+package com.luizalabs.readers;
 
 import com.luizalabs.models.Event;
 import com.luizalabs.models.Row;
@@ -7,12 +7,12 @@ import com.luizalabs.models.Row;
  * @author Ivo
  *
  */
-public class ClientBeginParser extends AbstractLineParser {
+public class BeginReader extends GenericReader {
 
     @Override
     public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.ClientBegin)) {
-            String rawLine = row.getRawLine();
+        if (row.getEvent().equals(Event.Begin)) {
+            String rawLine = row.getLine();
 
             String[] split = rawLine.split("\\s+");
 
