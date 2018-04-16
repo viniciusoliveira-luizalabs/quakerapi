@@ -59,7 +59,7 @@ public class GameResourceTest {
 
 		Mockito.when(gameService.getGameList()).thenReturn(gameList);
 
-		this.mockMvc.perform(get("/luizalabs/games")).andExpect(status().isOk())
+		this.mockMvc.perform(get("/api/v1/games")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
 	}
 	
@@ -84,7 +84,7 @@ public class GameResourceTest {
 
 		Mockito.when(gameService.getGameByNumber(gameNumber)).thenReturn(game);
 
-		this.mockMvc.perform(get("/luizalabs/game/" + gameNumber)).andExpect(status().isOk())
+		this.mockMvc.perform(get("/api/v1/game/" + gameNumber)).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
 		
 	}

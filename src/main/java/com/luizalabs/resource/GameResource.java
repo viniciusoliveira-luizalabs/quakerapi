@@ -19,7 +19,7 @@ import com.luizalabs.service.GameService;
  *
  */
 @RestController
-@RequestMapping(path = "luizalabs/")
+@RequestMapping(path = "api/v1/")
 public class GameResource {
 
 	@Autowired
