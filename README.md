@@ -1,6 +1,6 @@
 # Quake log parser
 ## Por que Java?
-Pelo conhecimento pré adiquirido, simplicidade e pela performance sobre outras linguagens.  
+Pelo conhecimento pré-adquirido, simplicidade e pela performance sobre outras linguagens.  
 (https://www.infoworld.com/article/2883328/node-js/java-vs-nodejs-an-epic-battle-for-developer-mindshare.html)  
 (https://www.vividcortex.com/blog/2013/12/09/analysis-of-paypals-node-vs-java-benchmarks/)  
 
