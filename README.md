@@ -15,8 +15,8 @@ A partir da raiz do projeto rodar o comando (cmd): mvn clean install
 
 ## API
 Utilizando o comandos no console (cmd):  
-- cd <caminho do .jar>  
-- java -jar logparser.jar  
+- cd <caminho do projeto>\target  
+- java -jar logparser-0.0.1.jar  
 
 ## Informações
 A API possui objetivo de ler um arquivo de log do jogo Quake e disponibilizar as informações colhidas de forma legível.  
