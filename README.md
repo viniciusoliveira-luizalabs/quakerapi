@@ -14,9 +14,9 @@ Maven - Seguir instruções em https://maven.apache.org/install.html
 A partir da raiz do projeto rodar o comando (cmd): mvn clean install  
 
 ## API
-Utilizando o comandos no console (cmd):  
-- cd <caminho do projeto>\target  
-- java -jar logparser-0.0.1.jar  
+Para executar, utilizando o console (cmd):  
+- cd <caminho do projeto> 
+- mvn spring-boot:run
 
 ## Informações
 A API possui objetivo de ler um arquivo de log do jogo Quake e disponibilizar as informações colhidas de forma legível.  
