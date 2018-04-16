@@ -11,13 +11,15 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Ivo
+ * 
+ *         Classe para leitura do log
  *
  */
 @Component
 public class ProcessFile implements Iterable<String> {
 
 	private Stream<String> lines;
-	
+
 	public ProcessFile() {
 		readFile();
 	}
@@ -27,7 +29,7 @@ public class ProcessFile implements Iterable<String> {
 		try {
 			@SuppressWarnings("resource")
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("src/main/java/games.log")));
-			
+
 			lines = bufferedReader.lines();
 
 		} catch (FileNotFoundException e) {

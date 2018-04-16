@@ -9,6 +9,8 @@ import lombok.ToString;
 
 /**
  * @author Ivo
+ * 
+ * Objeto data para armazenar tempo do jogo
  *
  */
 @Getter

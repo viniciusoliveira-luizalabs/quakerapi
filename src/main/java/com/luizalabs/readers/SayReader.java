@@ -6,31 +6,33 @@ import com.luizalabs.models.Row;
 /**
  * @author Ivo
  *
+ *         Leitor que se baseia na linha lida no log para armazenar informações
+ *
  */
 public class SayReader extends GenericReader {
 
-    @Override
-    public Row processLine(Row row) {
-        if (row.getEvent().equals(Event.say)) {
-            String rawLine = row.getLine();
+	@Override
+	public Row processLine(Row row) {
+		if (row.getEvent().equals(Event.say)) {
+			String rawLine = row.getLine();
 
-            String[] split = rawLine.split(" +", 3);
+			String[] split = rawLine.split(" +", 3);
 
-            String[] contents = split[2].split(":");
+			String[] contents = split[2].split(":");
 
-            String subject = contents[0];
-            String indirectObject = contents[1].trim();
+			String subject = contents[0];
+			String indirectObject = contents[1].trim();
 
-            row.setDescription(subject);
-            row.setTarget(indirectObject);
+			row.setDescription(subject);
+			row.setTarget(indirectObject);
 
-            return row;
+			return row;
 
-        } else if (successor != null) {
-            return successor.processLine(row);
-        } else {
-        	return Row.blankEvent();
-        }
-    }
+		} else if (successor != null) {
+			return successor.processLine(row);
+		} else {
+			return Row.blankEvent();
+		}
+	}
 
 }

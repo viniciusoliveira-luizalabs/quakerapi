@@ -1,22 +1,24 @@
-package com.luizalabs.models;
+package com.luizalabs.service;
 
 import java.util.List;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.luizalabs.models.Player;
+import com.luizalabs.models.Row;
 
 import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author Ivo
  *
- *         Objeto para armazenar informacoes do jogo
+ *         Objeto para manipulacao de informacoes do jogo
  */
 @Getter
 @Setter
-public class Game{
+public class Game {
+	
+	private int number = 0;
 
 	private static final int WORLD_PLAYER_ID = 1022;
 
@@ -24,28 +26,19 @@ public class Game{
 
 	private List<Player> players;
 
-	private Map<Integer, Integer> kills;
-
 	@JsonIgnore
 	private boolean initiated = false;
 	@JsonIgnore
 	private boolean finished = false;
 
-	/**
-	 * 
-	 */
-	public Game() {
+
+	public Game(int number) {
+		this.number = number;
 		totalKills = 0;
 		players = new ArrayList<>();
-		kills = new HashMap<>();
 
 	}
 
-	/**
-	 * @param row
-	 * 
-	 *            Adicao de eventos baseados no jogo
-	 */
 	public void addEvent(Row row) {
 
 		switch (row.getEvent()) {
@@ -69,22 +62,20 @@ public class Game{
 			playerID = Integer.parseInt(row.getDescription());
 			String playerName = row.getTarget();
 
-			// verifica se existe um jogador na lista com o nome passado
 			Player player = getPlayerByName(playerName);
 			if (player != null) {
-				// pega a chave do jogador existente
 				int oldPlayerReconnectedKey = player.getId();
-				// verifica se o jogador reconectou com diferente ID
 				if (oldPlayerReconnectedKey != playerID) {
-					// prepara jogador a ser trocado
-					Player playerSwap = players.stream().filter(p -> p.getId() == playerID).findFirst().orElse(null);
-					// troca os valores de id dos jogadores
-					playerSwap.setId(oldPlayerReconnectedKey);
-					player.setId(playerID);
-					// atualiza chave e valor no objeto kills
-					int killsAux = kills.get(playerID);
-					kills.put(playerID, kills.get(oldPlayerReconnectedKey) + killsAux);
-					kills.put(oldPlayerReconnectedKey, killsAux);
+
+					Player playerOld = player;
+					Player playerNew = getPlayerById(playerID);
+
+					playerNew.setKills(playerOld.getKills() + playerNew.getKills());
+					playerOld.setKills(playerNew.getKills());
+
+					playerNew.setId(oldPlayerReconnectedKey);
+					playerOld.setId(playerID);
+
 				}
 			} else {
 				player = getPlayerById(playerID);
@@ -122,11 +113,14 @@ public class Game{
 	void addKill(int killerID, int killedID) {
 
 		if (killerID != WORLD_PLAYER_ID) {
-			int playerTotalKills = kills.get(killerID);
-			kills.put(killerID, ++playerTotalKills);
+
+			Player player = getPlayerById(killerID);
+			player.setKills(player.getKills() + 1);
+
 		} else {
-			int playerTotalKills = kills.get(killedID);
-			kills.put(killedID, --playerTotalKills);
+
+			Player player = getPlayerById(killedID);
+			player.setKills(player.getKills() - 1);
 		}
 
 		totalKills++;
@@ -139,9 +133,12 @@ public class Game{
 			return;
 		}
 
-		players.add(new Player(playerId, ""));
-		kills.put(playerId, 0);
+		players.add(new Player(playerId, "", 0));
 
+	}
+	
+	public int getNumber() {
+		return number;
 	}
 
 }

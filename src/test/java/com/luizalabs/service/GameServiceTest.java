@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import com.luizalabs.models.Game;
 import com.luizalabs.models.Row;
 
 public class GameServiceTest {

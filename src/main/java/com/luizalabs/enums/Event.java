@@ -3,6 +3,8 @@ package com.luizalabs.enums;
 /**
  * @author Ivo
  *
+ * Lista de eventos que acontecem no jogo
+ *
  */
 public enum Event {
 

@@ -3,10 +3,7 @@ package com.luizalabs.resource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -18,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.github.javafaker.Faker;
-import com.luizalabs.models.Game;
 import com.luizalabs.models.Player;
+import com.luizalabs.service.Game;
 import com.luizalabs.service.GameService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,33 +41,52 @@ public class GameResourceTest {
 	}
 
 	@Test
-	public void getGamesInfo() throws Exception {
+	public void getGames() throws Exception {
 
 		List<Game> gameList = new ArrayList<>();
 
 		List<Player> playerList = new ArrayList<>();
-		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName()));
-		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName()));
-		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName()));
-		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
 
-		Map<Integer, Integer> killMap = new HashMap<>();
-		killMap.put(playerList.get(0).getId(), faker.number().randomDigit());
-		killMap.put(playerList.get(1).getId(), faker.number().randomDigit());
-		killMap.put(playerList.get(2).getId(), faker.number().randomDigit());
-		killMap.put(playerList.get(3).getId(), faker.number().randomDigit());
-
-		Game game = new Game();
+		Game game = new Game(faker.number().randomDigit());
 		game.setPlayers(playerList);
 		game.setTotalKills(faker.number().randomDigit());
-		game.setKills(killMap);
 
 		gameList.add(game);
 
 		Mockito.when(gameService.getGameList()).thenReturn(gameList);
 
-		this.mockMvc.perform(get("/luizalabs/game-info")).andExpect(status().isOk())
+		this.mockMvc.perform(get("/luizalabs/games")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+	}
+	
+	@Test
+	public void getGame() throws Exception {
+		
+		List<Game> gameList = new ArrayList<>();
+
+		List<Player> playerList = new ArrayList<>();
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+		playerList.add(new Player(faker.number().randomDigit(), faker.name().firstName(), faker.number().randomDigit()));
+
+		int gameNumber = faker.number().randomDigit();
+		
+		Game game = new Game(gameNumber);
+		game.setPlayers(playerList);
+		game.setTotalKills(faker.number().randomDigit());
+
+		gameList.add(game);
+
+		Mockito.when(gameService.getGameByNumber(gameNumber)).thenReturn(game);
+
+		this.mockMvc.perform(get("/luizalabs/game/" + gameNumber)).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+		
 	}
 
 }

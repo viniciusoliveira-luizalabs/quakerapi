@@ -17,6 +17,8 @@ import com.luizalabs.readers.ShutdownReader;
 
 /**
  * @author Ivo
+ * 
+ *         Define parametros para sucessao de eventos do jogo
  *
  */
 public class GameSetup {

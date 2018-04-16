@@ -11,20 +11,18 @@ import lombok.ToString;
 /**
  * @author Ivo
  *
- * Objeto que guarda informações do jogador
+ *         Objeto que guarda informações do jogador
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Player implements Serializable{
+public class Player implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
-	
+	private int kills;
+
 }
