@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LogparserApplication {
+public class QuakeparserApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LogparserApplication.class, args);
+		SpringApplication.run(QuakeparserApplication.class, args);
 	}
 }

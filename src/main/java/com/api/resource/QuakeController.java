@@ -1,6 +1,5 @@
 package com.api.resource;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,32 +9,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.service.GameService;
+import com.api.service.QuakeService;
 
-/**
- * @author Ivo
- * 
- * Controller do jogo, com endpoints para acesso a api
- *
- */
 @RestController
 @RequestMapping(path = "api/v1/")
-public class GameResource {
+public class QuakeController {
 
 	@Autowired
-	private GameService gameService;
+	private QuakeService quakeService;
 
 	@GetMapping(path = "games", produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<?> getGames() throws JSONException {
+	public ResponseEntity<?> getGames() {
 
-		return new ResponseEntity<Object>(gameService.getGameList(), HttpStatus.OK);
+		return new ResponseEntity<Object>(quakeService.getGames(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(path = "game/{number}", produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<?> getGame(@PathVariable int number) throws JSONException {
+	public ResponseEntity<?> getGame(@PathVariable int number) {
 
-		return new ResponseEntity<Object>(gameService.getGameByNumber(number), HttpStatus.OK);
+		return new ResponseEntity<Object>(quakeService.getGame(number), HttpStatus.OK);
 	}
+
 }
