@@ -1,4 +1,4 @@
-package com.api.models;
+package com.api.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ public class ModelsTest {
 
     @Before
     public void setUp(){
-        this.classes = PojoClassFactory.getPojoClassesRecursively("com.api.models", new FilterBasedOnInheritance(Serializable.class));
+        this.classes = PojoClassFactory.getPojoClassesRecursively("com.api.model", new FilterBasedOnInheritance(Serializable.class));
     }
 
     @Test

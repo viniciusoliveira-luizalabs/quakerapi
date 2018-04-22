@@ -1,5 +1,6 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,11 +12,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Game {
+public class Game implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@JsonIgnore
 	private int number = 0;

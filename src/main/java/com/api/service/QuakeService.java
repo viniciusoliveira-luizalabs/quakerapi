@@ -29,7 +29,7 @@ public class QuakeService {
 
 	private Map<String, Integer> currentKills;
 
-	private Map<String, Object> gameMap;
+	private Map<String, Game> gameMap;
 
 	@Autowired
 	public QuakeService(GameSetup gameSetup) {
@@ -38,7 +38,7 @@ public class QuakeService {
 		this.gameMap = new TreeMap<>(new NumberAwareStringComparator());
 	}
 
-	public Map<String, Object> getGames() {
+	public Map<String, Game> getGames() {
 
 		if (gameMap.isEmpty()) {
 			parseFile();
@@ -54,9 +54,6 @@ public class QuakeService {
 			parseFile();
 		}
 
-		// return games.stream().filter(g -> g.getNumber() ==
-		// number).findFirst().orElseThrow(new IllegalArgumentException("Jogo não
-		// encontrado!"));
 		return gameMap.values().stream().filter(g -> ((Game) g).getNumber() == number).findFirst().orElse(null);
 	}
 
