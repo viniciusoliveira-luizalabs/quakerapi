@@ -1,6 +1,6 @@
 package com.api.model;
 
-import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,25 +22,9 @@ public class Game {
 
 	private int totalKills;
 
-	private List<Player> players;
-
-	public boolean addPlayer(Player player) {
-		return players.add(player);
-	}
-
-	public boolean removePlayer(Player player) {
-		return players.remove(player);
-	}
-
-	public void updatePlayer(Player player) {
-		players.set(players.indexOf(player), player);
-	}
-
-	public Player getPlayerById(String playerID) {
-		return players.stream().filter(p -> p.getId().equals(playerID)).findFirst().orElse(null);
-	}
-
-	public Player getPlayerByName(String playerName) {
-		return players.stream().filter(p -> p.getName().equals(playerName)).findFirst().orElse(null);
-	}
+	private Object[] players;
+	
+	private Map<String, Integer> kills;
+	
+	
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.api.config.GameSetup;
 import com.api.model.Game;
-import com.api.model.Player;
 import com.api.util.NumberAwareStringComparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,17 +25,20 @@ public class QuakeService {
 
 	private Game currentGame;
 
-	private Map<String, Game> gameMap;
-	
+	private Map<String, String> currentPlayers;
+
+	private Map<String, Integer> currentKills;
+
+	private Map<String, Object> gameMap;
 
 	@Autowired
 	public QuakeService(GameSetup gameSetup) {
 		this.currentGame = null;
 		this.gameSetup = gameSetup;
-		this.gameMap = new TreeMap<>(new NumberAwareStringComparator());;
+		this.gameMap = new TreeMap<>(new NumberAwareStringComparator());
 	}
 
-	public Map<String, Game> getGames() {
+	public Map<String, Object> getGames() {
 
 		if (gameMap.isEmpty()) {
 			parseFile();
@@ -46,7 +48,7 @@ public class QuakeService {
 
 	}
 
-	public Game getGame(int number) {
+	public Object getGame(int number) {
 
 		if (gameMap.isEmpty()) {
 			parseFile();
@@ -55,7 +57,7 @@ public class QuakeService {
 		// return games.stream().filter(g -> g.getNumber() ==
 		// number).findFirst().orElseThrow(new IllegalArgumentException("Jogo não
 		// encontrado!"));
-		return gameMap.values().stream().filter(g -> g.getNumber() == number).findFirst().orElse(null);
+		return gameMap.values().stream().filter(g -> ((Game) g).getNumber() == number).findFirst().orElse(null);
 	}
 
 	private void parseFile() {
@@ -89,41 +91,43 @@ public class QuakeService {
 
 		String playerName = getNameOfArray(line);
 
-		Player player = currentGame.getPlayerByName(playerName);
-		
-		if (player == null) {
-			player = currentGame.getPlayerById(playerID);
-			if (player == null) {
-				player = new Player();
-				player.setId(playerID);
-				player.setName(playerName);
-				currentGame.addPlayer(player);
-			}else {
-				player.setName(playerName);
-				currentGame.updatePlayer(player);
-			}			
-		}else if (!player.getId().equals(playerID)) {
+		Boolean nameExists = currentPlayers.containsValue(playerName);
+		Boolean idExists = currentPlayers.containsKey(playerID);
 
-			String oldPlayerReconnectedKey = player.getId();
+		if (!nameExists && !idExists) {
+			//	NOVO PLAYER
+			currentPlayers.put(playerID, playerName);
+			currentKills.put(playerName, 0);
+
+		}else if(!nameExists && idExists) {
+			// PLAYER TROCOU DE NOME
+			int playerKills = currentKills.get(currentPlayers.get(playerID));			
+			currentKills.remove(currentPlayers.get(playerID));
+			
+			currentPlayers.put(playerID, playerName);
+			currentKills.put(playerName, playerKills);
+			
+		}else if (nameExists && idExists) {
+			
+			String oldPlayerReconnectedKey = getPlayerKeyByName(playerName);
+			// PLAYER RECONECTOU COM ID EXISTENTE
 			if (!oldPlayerReconnectedKey.equals(playerID)) {
 
-				Player playerOld = player;
-				Player playerNew = currentGame.getPlayerById(playerID);
+				String newPlayerName = currentPlayers.get(playerID);
 
-				if (playerNew != null) {
+				currentPlayers.remove(oldPlayerReconnectedKey);
+				currentPlayers.remove(playerID);
 
-					playerNew.setId(oldPlayerReconnectedKey);
-					playerOld.setId(playerID);
-
-					currentGame.updatePlayer(playerOld);
-					currentGame.updatePlayer(playerNew);
-				}
-				else {
-					playerOld.setId(playerID);
-					currentGame.updatePlayer(playerOld);
-				}
+				currentPlayers.put(playerID, playerName);
+				currentPlayers.put(oldPlayerReconnectedKey, newPlayerName);
 			}
+		}else if(nameExists && !idExists) {
+			// PLAYER RECONECTOU COM ID NOVO
+			currentPlayers.remove(getPlayerKeyByName(playerName));
+			currentPlayers.put(playerID, playerName);
 		}
+		currentGame.setKills(currentKills);
+		currentGame.setPlayers(currentPlayers.values().toArray());
 
 	}
 
@@ -134,16 +138,20 @@ public class QuakeService {
 
 		String[] words = line.split(" +");
 
-		Player playerKiller = currentGame.getPlayerById(words[2]);
-		Player playerKilled = currentGame.getPlayerById(words[3]);
+		String playerKiller = currentPlayers.get(words[2]);
+		String playerKilled = currentPlayers.get(words[3]);
 
 		if (!words[2].equals(WORLD_PLAYER_ID)) {
-			int playerKillerkills = playerKiller.getKills();
-			playerKiller.setKills(++playerKillerkills);
+			
+			int playerKillerKills = currentKills.get(playerKiller);
+			currentKills.put(playerKiller, ++playerKillerKills);
 		} else {
-			int playerKilledkills = playerKilled.getKills();
-			playerKilled.setKills(--playerKilledkills);
+			
+			int playerKilledKills = currentKills.get(playerKilled);
+			currentKills.put(playerKilled, --playerKilledKills);
 		}
+
+		currentGame.setKills(currentKills);
 
 	}
 
@@ -151,12 +159,16 @@ public class QuakeService {
 
 		gameNumber++;
 
+		currentPlayers = new TreeMap<>();
+		currentKills = new TreeMap<>();
+
 		Game game = new Game();
 		game.setTotalKills(0);
-		game.setPlayers(new ArrayList<>());
+		game.setPlayers(currentPlayers.values().toArray());
 		game.setNumber(gameNumber);
-		
-		gameMap.put("game_"+gameNumber, game);
+		game.setKills(currentKills);
+
+		gameMap.put("game_" + gameNumber, game);
 
 		currentGame = game;
 
@@ -173,6 +185,21 @@ public class QuakeService {
 			l.add(s);
 		}
 		return l.toArray(new String[0])[0].split("\\\\")[1];
+	}
+
+	// private Player getPlayerById(String playerID) {
+	// return players.stream().filter(p ->
+	// p.getId().equals(playerID)).findFirst().orElse(null);
+	// }
+	//
+	// private Player getPlayerByName(String playerName) {
+	// return players.stream().filter(p ->
+	// p.getName().equals(playerName)).findFirst().orElse(null);
+	// }
+
+	private String getPlayerKeyByName(String playerName) {
+		return currentPlayers.entrySet().stream().filter(e -> e.getValue().equals(playerName)).findFirst().get()
+				.getKey();
 	}
 
 }
