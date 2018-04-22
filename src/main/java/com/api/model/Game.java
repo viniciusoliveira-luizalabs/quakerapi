@@ -13,7 +13,6 @@ import lombok.ToString;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
 @ToString
 public class Game implements Serializable{
 
