@@ -21,6 +21,10 @@ import com.api.model.Game;
 
 import com.github.javafaker.Faker;
 
+/**
+ * @author ivofreitas
+ *
+ */
 public class QuakeControllerTest {
 
 	private final Faker faker = new Faker();

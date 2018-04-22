@@ -5,12 +5,14 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+/**
+ * @author ivofreitas
+ * 
+ * Objeto que armazena informações do jogo
+ */
 @Data
 @NoArgsConstructor
 @ToString

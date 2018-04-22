@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.service.QuakeService;
-
+/**
+ * @author ivofreitas
+ * Classe controller
+ */
 @RestController
 @RequestMapping(path = "api/v1/")
 public class QuakeController {

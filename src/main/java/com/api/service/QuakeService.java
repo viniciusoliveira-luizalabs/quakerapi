@@ -13,7 +13,10 @@ import com.api.model.Game;
 import com.api.util.NumberAwareStringComparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * @author ivofreitas
+ * Classe service
+ */
 @Service
 public class QuakeService {
 
@@ -37,7 +40,10 @@ public class QuakeService {
 		this.gameSetup = gameSetup;
 		this.gameMap = new TreeMap<>(new NumberAwareStringComparator());
 	}
-
+	
+	/**
+	 * @return games
+	 */
 	public Map<String, Game> getGames() {
 
 		if (gameMap.isEmpty()) {
@@ -48,15 +54,22 @@ public class QuakeService {
 
 	}
 
-	public Object getGame(int number) {
+	/**
+	 * @param number
+	 * @return game
+	 */
+	public Game getGame(int number) {
 
 		if (gameMap.isEmpty()) {
 			parseFile();
 		}
 
-		return gameMap.values().stream().filter(g -> ((Game) g).getNumber() == number).findFirst().orElse(null);
+		return gameMap.values().stream().filter(g -> g.getNumber() == number).findFirst().orElse(null);
 	}
 
+	/**
+	 *  Interpretação do arquivo log
+	 */
 	private void parseFile() {
 
 		for (String line : gameSetup.getLines()) {
@@ -80,6 +93,11 @@ public class QuakeService {
 
 	}
 
+	/**
+	 * @param line
+	 * 
+	 * Novo jogador / Mudança de nome e id do jogador
+	 */
 	private void parseClientUserinfoChanged(String line) {
 
 		String[] words = line.split("\\s+");
@@ -128,6 +146,11 @@ public class QuakeService {
 
 	}
 
+	/**
+	 * @param line
+	 * 
+	 * Computa mortes do jogo
+	 */
 	private void parseKilled(String line) {
 
 		int totalKills = currentGame.getTotalKills();
@@ -143,7 +166,7 @@ public class QuakeService {
 			int playerKillerKills = currentKills.get(playerKiller);
 			currentKills.put(playerKiller, ++playerKillerKills);
 		} else {
-			
+
 			int playerKilledKills = currentKills.get(playerKilled);
 			currentKills.put(playerKilled, --playerKilledKills);
 		}
@@ -152,6 +175,11 @@ public class QuakeService {
 
 	}
 
+	/**
+	 * @param line
+	 * 
+	 *  Inicio de um novo jogo
+	 */
 	private void parseInitGame(String line) {
 
 		gameNumber++;
@@ -171,6 +199,12 @@ public class QuakeService {
 
 	}
 
+	/**
+	 * @param str
+	 * @return nome
+	 * 
+	 * Interpreta a linha para extrair nome do jogador
+	 */
 	private String getNameOfArray(String str) {
 
 		Pattern pattern = Pattern.compile("(n\\\\)(.+?)(\\\\t)");
@@ -184,16 +218,13 @@ public class QuakeService {
 		return l.toArray(new String[0])[0].split("\\\\")[1];
 	}
 
-	// private Player getPlayerById(String playerID) {
-	// return players.stream().filter(p ->
-	// p.getId().equals(playerID)).findFirst().orElse(null);
-	// }
-	//
-	// private Player getPlayerByName(String playerName) {
-	// return players.stream().filter(p ->
-	// p.getName().equals(playerName)).findFirst().orElse(null);
-	// }
-
+	
+	/**
+	 * @param playerName
+	 * @return playerKey
+	 * 
+	 * Percorre mapa de jogadores para retornar a chave a partir do nome
+	 */
 	private String getPlayerKeyByName(String playerName) {
 		return currentPlayers.entrySet().stream().filter(e -> e.getValue().equals(playerName)).findFirst().get()
 				.getKey();

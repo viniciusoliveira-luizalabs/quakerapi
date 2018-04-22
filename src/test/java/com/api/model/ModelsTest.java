@@ -17,6 +17,10 @@ import com.openpojo.validation.rule.impl.SetterMustExistRule;
 import com.openpojo.validation.test.impl.GetterTester;
 import com.openpojo.validation.test.impl.SetterTester;
 
+/**
+ * @author ivofreitas
+ *
+ */
 public class ModelsTest {
 
     private List<PojoClass> classes;

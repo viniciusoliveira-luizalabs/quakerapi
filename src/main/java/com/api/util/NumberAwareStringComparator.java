@@ -5,6 +5,11 @@ import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author ivofreitas
+ * 
+ * Classe com nova implementação de "compare" para ordenação de TreeMap
+ */
 public class NumberAwareStringComparator implements Comparator<String> {
 
 	private static final Pattern PATTERN = Pattern.compile("(\\D*)(\\d*)");

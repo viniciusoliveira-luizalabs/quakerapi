@@ -2,8 +2,6 @@ package com.api.service;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,6 +14,10 @@ import org.mockito.MockitoAnnotations;
 import com.api.config.GameSetup;
 import com.api.model.Game;
 
+/**
+ * @author ivofreitas
+ *
+ */
 public class QuakeServiceTest {
 	@Mock
 	private GameSetup gameSetup;

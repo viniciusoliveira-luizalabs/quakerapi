@@ -12,7 +12,11 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
+/**
+ * @author ivofreitas
+ * 
+ * Classe para leitura de arquivo
+ */
 @Component
 public class GameSetup {
 
