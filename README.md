@@ -9,14 +9,14 @@ Java JDK 8 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-download
 Maven  http://maven.apache.org/download.cgi  
 
 ## Instalação
-Java - Definir a variavel de ambiente JAVA_HOME com o diretorio "bin" da instalação do java  
-Maven - Seguir instruções em https://maven.apache.org/install.html  
-A partir da raiz do projeto rodar o comando (cmd): mvn clean install  
+Java - Seguir instruções em https://www.devmedia.com.br/preparacao-do-ambiente-para-desenvolvimento-em-java/25188   
+Maven - Seguir instruções em http://luizricardo.org/2014/06/instalando-configurando-e-usando-o-maven-para-gerenciar-suas-dependencias-e-seus-projetos-java/ 
+A partir da raiz do projeto rodar o comando (cmd): ```mvn clean install``` 
 
 ## API
 Para executar, utilizando o console (cmd):  
-- cd <caminho do projeto> 
-- mvn spring-boot:run
+- ``` cd <caminho do projeto> ```
+- ``` mvn spring-boot:run ```
 
 ## Informações
 A API possui objetivo de ler um arquivo de log do jogo Quake e disponibilizar as informações colhidas de forma legível.  
