@@ -26,4 +26,4 @@ A API possui objetivo de ler um arquivo de log do jogo Quake e disponibilizar as
   -> "/api/v1/games" retorna informações sobre todos os jogos  
 
 ## Testes unitários
-A partir da raiz do projeto rodar o comando (cmd): mvn test  
+A partir da raiz do projeto rodar o comando (cmd): ```mvn test```  
