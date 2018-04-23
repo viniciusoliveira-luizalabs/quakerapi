@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.config.GameSetup;
+import com.api.exception.EntityNotFoundException;
 import com.api.model.Game;
 import com.api.util.NumberAwareStringComparator;
 import java.util.regex.Matcher;
@@ -63,8 +64,14 @@ public class QuakeService {
 		if (gameMap.isEmpty()) {
 			parseFile();
 		}
+		
+		Game game = gameMap.values().stream().filter(g -> g.getNumber() == number).findFirst().orElse(null);
 
-		return gameMap.values().stream().filter(g -> g.getNumber() == number).findFirst().orElse(null);
+		if (game == null) {
+			throw new EntityNotFoundException("Jogo não encontrado!");
+		}else {
+			return game;
+		}
 	}
 
 	/**
