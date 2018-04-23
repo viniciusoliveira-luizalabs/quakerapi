@@ -10,7 +10,7 @@ Maven  http://maven.apache.org/download.cgi
 
 ## Instalação
 Java - Seguir instruções em https://www.devmedia.com.br/preparacao-do-ambiente-para-desenvolvimento-em-java/25188   
-Maven - Seguir instruções em http://luizricardo.org/2014/06/instalando-configurando-e-usando-o-maven-para-gerenciar-suas-dependencias-e-seus-projetos-java/ 
+Maven - Seguir instruções em http://luizricardo.org/2014/06/instalando-configurando-e-usando-o-maven-para-gerenciar-suas-dependencias-e-seus-projetos-java/  
 A partir da raiz do projeto rodar o comando (cmd): ```mvn clean install``` 
 
 ## API
