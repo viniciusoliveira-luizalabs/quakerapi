@@ -70,7 +70,7 @@ public class QuakeServiceTest {
 		
 		Mockito.when(gameSetup.getLines()).thenReturn(lines);
 		
-		assertEquals(null, quakeService.getGame(10));
+		quakeService.getGame(10);
 	}
 	
 	private String[] parseFile() {
